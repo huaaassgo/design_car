@@ -90,5 +90,29 @@ router.post('/register',(req,res)=>{
 		}
 	})
 })
+//登陆
+router.post('/login',(req,res)=>{
+	var obj=req.body;
+	var $uname=obj.uname;
+	var $upwd=obj.upwd;
+	if(!$uname){
+		res.send('1_0');
+		return;
+	}
+	if(!$upwd){
+		res.send('2_0');
+		return;
+	}
+	pool.query('SELECT * FROM car_user WHERE uname=? AND upwd=?',[$uname,$upwd],(err,result)=>{
+		if(err) throw err;
+		if(result.length>0){
+			res.send('1');
+			return;
+		}else{
+			res.send('0');
+			return;
+		}
+	})
+})
 //导出路由器
 module.exports=router;

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+用户名：<input type="text" name="" id="uname"><span id="check_uname"></span><br>
+&nbsp;&nbsp;&nbsp;密码：<input type="password" name="" id="upwd"><span id="check_upwd"></span><br>
+<input type="button" name="" onclick="login()" value="登陆">
+<script type="text/javascript">
+	function login(){
+		var xhr=new XMLHttpRequest;
+		xhr.onreadystatechange=function(){
+			if(xhr.readyState==4&&xhr.status==200){
+				var result=xhr.responseText;
+				if(result=='1_0'){
+					check_uname.innerHTML='用户名不能为空';
+				}else if(result=='2_0'){
+					check_upwd.innerHTML='密码不能为空';
+				}else if(result==0){
+					alert('用户名或密码错误');
+				}else if(result==1){
+					alert('登录成功');
+					location.href='http://127.0.0.1:3000/index.html';
+				}
+			}
+		}
+		xhr.open('post','/user/login',true);
+		var formdata='uname='+uname.value+'&upwd='+upwd.value;
+		xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+		xhr.send(formdata);
+	}
+</script>
+</body>
+</html>

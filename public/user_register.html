@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+	用户名称：<input type="text" name="" id="uname" onblur="register_uname()"><span id="unameMsg"></span><br>
+	用户密码：<input type="passward" name="" id="upwd1"><br><span id="upwd1Msg"></span>
+	确认密码：<input type="passward" name="" id="upwd2" onblur="check_upwd()"><span id="upwdMsg"></span><br>
+	用户邮箱：<input type="text" name="" id="email"><br>
+	手机号码：<input type="text" name="" id="phone"><br>
+	<input type="button" name="" value="注册" onclick="register()">
+	<script type="text/javascript">
+		function register_uname(){
+			//创建异步对象
+			var xhr=new XMLHttpRequest;
+			//绑定监听
+			xhr.onreadystatechange=function(){
+				if(xhr.readyState==4&&xhr.status==200){
+					var result=xhr.responseText;
+					if(result==1){
+						unameMsg.innerHTML='用户名已存在';
+					}else if(result==0){
+						unameMsg.innerHTML='用户名可以使用';
+					}else if(result==2){
+						unameMsg.innerHTML='用户名不能为空';
+					}
+				}
+			}
+			//打开链接，创建请求
+			xhr.open('post','/user/register_uname',true);
+			//发送请求
+			var formdata='uname='+uname.value;
+			xhr.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
+			xhr.send(formdata);
+		}
+		function check_upwd(){
+
+			if(upwd1.value==upwd2.value){
+				upwdMsg.innerHTML='ok';
+			}else if (upwd1.value!=upwd2.value){
+				upwdMsg.innerHTML='两次输入不同';
+			}
+		}
+		function register(){
+			var xhr=new XMLHttpRequest;
+			xhr.onreadystatechange=function(){
+				if(xhr.readyState==4&&xhr.status==200){
+					var result=xhr.responseText;
+					if(result==1){
+						alert('注册成功');
+						location.href='http://127.0.0.1:3000/index.html';
+					}else{
+						alert('注册失败');
+					}
+				}
+			}
+			xhr.open('post','/user/register',true);
+			var formdata='uname='+uname.value+'&upwd='+upwd.value+'&email='+email.value+'&phone='+phone.value;
+			xhr.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
+			xhr.send(formdata);
+		}
+	</script>
+</body>
+</html>

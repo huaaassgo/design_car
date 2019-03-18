@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<style type="text/css">
+		*{
+			margin: 0;
+			padding: 0;
+		}
+	</style>
+</head>
+<body onload="product_query()">
+<div>
+	商品名称：<input type="text" name="" id="pname"><span id="pnameMsg"></span><br>	
+	商品价格：<input type="text" name="" id="price"><span id="priceMsg"></span><br>
+	商品简介：<input type="text" name="" id="ptxt"><span id="ptxtMsg"></span><br>
+	<br><input type="button" name="" value="修改">
+</div>
+<script type="text/javascript">
+	var urlParams=new URLSearchParams(location.search);
+	var pid=urlParams.get("pid");
+	function product_query(){
+		var xhr=new XMLHttpRequest;
+		xhr.onreadystatechange=function(){
+			if(xhr.readyState==4&&xhr.status==200){
+				var result=xhr.responseText;
+				var product=JSON.parse(result);
+				pname.value=product.pname;
+				price.value=product.price;
+				ptxt.value=product.ptxt;
+			}
+		}
+		xhr.open('get','/admin/product_query?pid='+pid,true);
+		xhr.send(null);
+	}
+</script>
+</body>
+</html>

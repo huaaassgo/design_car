@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body onload="user_query()">
+<div>
+	用户名：<input type="text" name="" id="uname"><span id="unameMsg"></span><br>	
+	邮箱：<input type="text" name="" id="email"><span id="emailMsg"></span><br>
+	电话：<input type="text" name="" id="phone"><span id="phoneMsg"></span><br>
+	性别：<input type="radio" name="gender" value="1" id="man" checked="">男
+		<input type="radio" name="gender" value="0" id="woman">女
+		<input type="radio" name="gender" value="null" id="unk">不详
+	<br><input type="button" name="" value="修改" onclick="user_update()">
+</div>
+<script type="text/javascript">
+	var urlParams=new URLSearchParams(location.search);
+	var uid=urlParams.get("uid");
+	function user_query(){
+		var xhr=new XMLHttpRequest;
+		xhr.onreadystatechange=function(){
+			if(xhr.readyState==4&&xhr.status==200){
+				var result=xhr.responseText;
+				var user=JSON.parse(result);
+				uname.value=user.uname;
+				email.value=user.email;
+				phone.value=user.phone;
+				if(user.gender=="1"){
+					man.checked=true;
+				}else if(user.gender=="0"){
+					woman.checked=true;
+				}else{
+					unk.checked=true;
+				}
+			}
+		}
+		xhr.open('get','/admin/user_query?uid='+uid,true);
+		xhr.send(null);
+	}
+	function user_update(){
+		var msg='确定要修改吗';
+		if(confirm(msg)==true){
+		var xhr=new XMLHttpRequest;
+		xhr.onreadystatechange=function(){
+			if(xhr.readyState==4&&xhr.satus==200){
+				var result=xhr.responseText;
+				if(result=='1_0'){
+					unameMsg.innerHTML='用户名不能为空';
+				}else if(result=='2_0'){
+					emailMsg.innerHTML='邮箱不能为空';
+				}else if(result=='3_0'){
+					phoneMsg.innerHTML='电话不能为空';
+				}else{
+					alert('修改成功！');
+					location.href="http://127.0.0.1:3000/user_list.html";
+				}
+			}
+		}
+		xhr.open('post','/admin/user_update',true);
+		formdata="uid="+uid+"&uname="+uname.value+"&email="+email.value+"&phone="+phone.value;
+		xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+		xhr.send(formdata);
+	}
+}else{
+	return false;
+}
+</script>
+</body>
+</html>

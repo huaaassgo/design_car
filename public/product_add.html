@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+<div>
+	商品名称：<input type="text" name="" id="pname"><span id="pnameMsg"></span><br>
+	商品价格：<input type="text" name="" id="price"><span id="priceMsg"></span><br>
+	商品简介：<input type="text" name="" id="ptxt"><span id="ptxtMsg"></span><br>
+	<input type="button" name="" onclick="add()" value="添加">
+</div>
+<script type="text/javascript">
+	function add(){
+		var xhr=new XMLHttpRequest;
+		xhr.onreadystatechange=function(){
+			if(xhr.readyState==4&&xhr.status==200){
+				var result=xhr.responseText;
+				if(result=='1_0'){
+					pnameMsg.innerHTML='商品名称不能为空';
+				}else if(result=='2_0'){
+					priceMsg.innerHTML='商品价格不能为空';
+				}else if(result=='3_0'){
+					ptxtMsg.innerHTML='商品简介不能为空';
+				}else{
+					alert('添加成功！');
+					location.href="http://127.0.0.1:3000/product_add.html";
+				}
+			}
+		}
+		xhr.open('post','/admin/product_add',true);
+		formdata="pname="+pname.value+"&price="+price.value+"&ptxt="+ptxt.value;
+		xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+		xhr.send(formdata);
+	}
+</script>
+</body>
+</html>

@@ -1,6 +1,8 @@
 const express=require('express');
 const bodyParser=require('body-Parser');
 const userRouter=require('./routers/user.js');
+const productRouter=require('./routers/product.js');
+const adminRouter=require('./routers/admin.js');
 //创建web服务器
 var server=express();
 server.listen(3000);
@@ -12,3 +14,5 @@ server.use(bodyParser.urlencoded({
 }));
 //挂载
 server.use('/user',userRouter);
+server.use('/product',productRouter);
+server.use('/admin',adminRouter);

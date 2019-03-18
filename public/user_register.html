@@ -49,8 +49,10 @@
 						upwd2Msg.innerHTML='确认密码不能为空';
 					}else if(result=='3'){
 						upwd2Msg.innerHTML='两次密码不同';
+						upwd1Msg.innerHTML='';
 					}else if(result=='1'){
 						upwd2Msg.innerHTML='ok';
+						upwd1Msg.innerHTML='ok';
 						isregisterUpwd=true;
 					}
 				}

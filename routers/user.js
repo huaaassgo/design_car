@@ -11,7 +11,7 @@ router.post('/register_uname',(req,res)=>{
 		res.send('2');
 		return;
 	}
-	pool.query('SELECT * FROM car_user WHERE uname=?',[$uname],(err,result)=>{
+	pool.query('SELECT uname FROM car_user WHERE uname=?',[$uname],(err,result)=>{
 		if(err) throw err;
 		if(result.length>0){
 			res.send('1');

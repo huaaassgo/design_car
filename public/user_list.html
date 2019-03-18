@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<style type="text/css">
+		*{
+			margin:0;
+			padding: 0;
+		}
+		table{
+			width: 100%;
+			border:1px solid #faa;
+			border-collapse: collapse;
+		}
+		td{
+			border:1px solid #aaf;
+			height: 50px;
+			text-align: center;
+		}
+	</style>
+</head>
+<body onload="user_list()">
+<div>
+	<table>
+		<thead>
+			<tr>
+				<th>用户名</th>
+				<th>邮箱</th>
+				<th>电话</th>
+				<th>性别</th>
+				<th>操作</th>
+			</tr>
+		</thead>
+		<tbody id="t_user">
+			
+		</tbody>
+	</table>
+</div>
+<script type="text/javascript">
+function user_list(){
+		//创建异步对象
+	var xhr=new XMLHttpRequest;
+	//绑定监听
+	xhr.onreadystatechange=function(){
+		if(xhr.readyState==4&&xhr.status==200){
+			var result=xhr.responseText;
+			var list=JSON.parse(result);
+			for(var i=0;i<list.length;i++){
+				if(list[i].gender=='1'){
+					list[i].gender='男';
+				}else if(list[i].gender=='0'){
+					list[i].gender='女';
+				}else{
+					list[i].gender='不详'
+				}
+				t_user.innerHTML+="<tr><td>"+list[i].uname+"</td><td>"+list[i].email+"</td><td>"+list[i].phone+"</td><td>"+list[i].gender+"</td><td><a href='javascript:user_delete("+list[i].uid+")'>删除</a>  <a href='user_update.html?uid="+list[i].uid+"'>修改</a></td></tr>"
+			}
+		}
+	}
+	//打开链接，创建请求
+	xhr.open('get','/admin/user_list',true);
+	//发送请求
+	xhr.send(null);
+}
+function user_delete(uid){
+	var msg="确定要删除吗";
+		//创建异步对象
+		//删除确认
+	if(confirm(msg)==true){
+	var xhr=new XMLHttpRequest;
+	//绑定监听
+	xhr.onreadystatechange=function(){
+		if(xhr.readyState==4&&xhr.status==200){
+			var result=xhr.responseText;
+			if(result==1){
+				alert('删除成功');
+				location.href='http://127.0.0.1:3000/user_list.html';
+			}		
+		}
+	}
+	//打开链接，创建请求
+	xhr.open('get',"/admin/user_delete?uid="+uid,true);
+	//发送请求
+	xhr.send(null);
+	}else{
+		return false;
+	}
+}
+</script>
+</body>
+</html>
